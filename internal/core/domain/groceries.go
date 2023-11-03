@@ -1,11 +1,13 @@
 package domain
 
+import "time"
+
 type Grocery struct {
+	ID           string
 	Name         string
 	Type         string
 	PurchaseDate string
-	// esse dia de vencimento pode ser gerado atraves do dia compra no momento de inserção no banco
-	// vindo da api. Exemplo, digamos que é tipo é tomate e dura tanto tempo, aí preenchemos o due date
+	Ingredient   string
 	DueDate      string
 	IsPerishable bool
 	Quantity     Quantity
@@ -14,4 +16,17 @@ type Grocery struct {
 type Quantity struct {
 	Value float64
 	Type  string
+}
+
+// verifica ingredients não disponíveis nos mantimentos
+func GroceriesExpired(groceries []Grocery) []Grocery {
+	var expired []Grocery
+	for _, grocery := range groceries {
+		today := time.Now().Format(time.DateOnly)
+		if grocery.DueDate <= today {
+			expired = append(expired, grocery)
+		}
+	}
+
+	return expired
 }
