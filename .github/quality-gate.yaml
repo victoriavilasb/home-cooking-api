@@ -1,0 +1,33 @@
+name: Quality Gate
+on:
+  pull_request:
+    types: [opened,reopened,synchronize]
+  push:
+    branches:
+      - main
+
+jobs:
+  application-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14.1-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ttrack
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+
+      - run: |
+          make test
