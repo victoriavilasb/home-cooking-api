@@ -390,3 +390,54 @@ func TestRecipeIngredientsAvailable(t *testing.T) {
 	})
 
 }
+
+// func TestRecipesAvailable(t *testing.T) {
+// 	recipes := []domain.Recipe{
+// 		{
+// 			ID:   "recipe-1",
+// 			Name: "Pavlova",
+// 			Ingredients: map[string]domain.Quantity{
+// 				"ovo": {
+// 					Value: 15,
+// 					Type:  "unit",
+// 				},
+// 			},
+// 		},
+// 		{
+// 			ID:   "recipe-2",
+// 			Name: "Pavlova",
+// 			Ingredients: map[string]domain.Quantity{
+// 				"ovo": {
+// 					Value: 2,
+// 					Type:  "unit",
+// 				},
+// 				"mararrao": {
+// 					Value: 200,
+// 					Type:  "grams",
+// 				},
+// 			},
+// 		},
+// 		{
+// 			ID:   "recipe-3",
+// 			Name: "Bruschetta",
+// 			Ingredients: map[string]domain.Quantity{
+// 				"pao": {
+// 					Value: 1,
+// 					Type:  "unit",
+// 				},
+// 				"tomate": {
+// 					Value: 3,
+// 					Type:  "unit",
+// 				},
+// 				"cebola": {
+// 					Value: 1,
+// 					Type:  "unit",
+// 				},
+// 				"alho": {
+// 					Value: 1,
+// 					Type:  "unit",
+// 				},
+// 			},
+// 		},
+// 	}
+// }

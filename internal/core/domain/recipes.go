@@ -46,39 +46,21 @@ func IsRecipeIngredientsAvailable(recipe Recipe, groceries []Grocery) bool {
 }
 
 // // retorna um array com todos os ingredientes faltantes
-// func MissingRecipeIngredients(recipe Recipe, groceries []Grocery) map[string]Quantity {
-// 	ingredientGroceryMapping := map[string]Grocery{}
-// 	missingIngredients := map[string]Quantity{}
-// 	for _, grocery := range groceries {
-// 		ingredientGroceryMapping[grocery.Ingredient] = grocery
-// 	}
-
-// 	for ingredient, recipeQuantity := range recipe.Ingredients {
-// 		grocery, found := ingredientGroceryMapping[ingredient]
-// 		if !found {
-// 			missingIngredients[ingredient] = recipeQuantity
-// 			continue
-// 		}
-
-// 		// ainda não temos conversão de unidades
-// 		if recipeQuantity.Value > grocery.Quantity.Value {
-// 			missingIngredients[ingredient] = Quantity{
-// 				Value: ,
-// 			}
-// 			return false
-// 		}
-
-// 		today := time.Now().Format(time.DateOnly)
-// 		if grocery.DueDate < today {
-// 			return false
-// 		}
-// 	}
-
-// 	return true
-
-// }
+func MissingRecipeIngredients(recipe Recipe, groceries []Grocery) map[string]Quantity {
+	return nil
+}
 
 // retorna as receitas cujos ingredientes estão disponíveis
-// func RecipesAvailable([]Recipe, []Grocery) []string {
+func RecipesAvailable(recipes []Recipe, groceries []Grocery) []string {
+	var recipesAvailable []string
+	for _, recipe := range recipes {
+		available := IsRecipeIngredientsAvailable(recipe, groceries)
+		if !available {
+			continue
+		}
 
-// }
+		recipesAvailable = append(recipesAvailable, recipe.Name)
+	}
+
+	return recipesAvailable
+}
