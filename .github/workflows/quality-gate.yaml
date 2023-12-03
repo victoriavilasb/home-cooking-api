@@ -41,4 +41,4 @@ jobs:
         run: gocov convert coverage.out | gocov annotate -
 
       - name: Report
-        run: gocov test | gocov report
+        run: gocov test ./... | gocov report
