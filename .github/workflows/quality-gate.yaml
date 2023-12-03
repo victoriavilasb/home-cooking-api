@@ -35,7 +35,7 @@ jobs:
   
       - name: Run tests with coverage
         run: |
-          gocov test -coverprofile=coverage.out
+          go test -cover -coverprofile=coverage.out ./...
 
       - name: Convert
         run: gocov convert coverage.out | gocov annotate -
