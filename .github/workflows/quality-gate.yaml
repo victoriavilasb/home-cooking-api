@@ -35,17 +35,10 @@ jobs:
   
       - name: Run tests with coverage
         run: |
-          mkdir -p coverage
-          gocov test ./... > coverage/coverage.out
+          gocov -coverprofile=coverage.out
 
-      - name: Merge coverage files
-        run: gocov-merge coverage/*.out > coverage/merged.out
+      - name: Convert
+        run: gocov convert coverage.out | gocov annotate -
 
-      - name: Convert coverage to JSON
-        run: gocov convert coverage/merged.out | gocov-xml > coverage/coverage.xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage
-          path: coverage
+      - name: Report
+        run: gocov test | gocov report
