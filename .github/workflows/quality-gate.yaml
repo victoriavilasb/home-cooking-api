@@ -31,7 +31,7 @@ jobs:
           make test
 
       - name: Install gocov
-        run: go get -u github.com/axw/gocov/gocov
+        run: go install github.com/axw/gocov/gocov@latest
   
       - name: Run tests with coverage
         run: |
