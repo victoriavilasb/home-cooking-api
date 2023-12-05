@@ -32,10 +32,6 @@ jobs:
 
       - name: Install gocov
         run: go install github.com/axw/gocov/gocov@latest
-  
-      - name: Run tests with coverage
-        run: |
-          go test -cover -coverprofile=coverage.out ./...
 
-      - name: Convert
-        run: gocov convert coverage.out | gocov annotate -
+      - name: Report
+        run: gocov test ./... | gocov report
