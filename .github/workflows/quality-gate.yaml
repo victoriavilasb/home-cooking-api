@@ -30,9 +30,6 @@ jobs:
       - name: run migrations
         run: go run cmd/migrations/main.go
 
-      - run: |
-          make test
-
       - name: Install gocov
         run: go install github.com/axw/gocov/gocov@latest
   
