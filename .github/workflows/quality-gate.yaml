@@ -39,6 +39,3 @@ jobs:
 
       - name: Convert
         run: gocov convert coverage.out | gocov annotate -
-
-      - name: Report
-        run: gocov report
