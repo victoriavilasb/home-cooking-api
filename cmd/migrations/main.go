@@ -3,9 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
-	"github.com/google/uuid"
 	_ "github.com/lib/pq" // Importe o driver PostgreSQL
 )
 
@@ -21,7 +19,6 @@ func main() {
 	createIngredientsTable(db)
 	createRecipeIngredientsTable(db)
 	createGroceriesTable(db)
-	createIngredients(db)
 	addExternalIDConstraints(db)
 
 	fmt.Println("Migrações concluídas com sucesso.")
@@ -93,47 +90,6 @@ func createGroceriesTable(db *sql.DB) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func createIngredients(db *sql.DB) {
-	ingredients := []string{
-		"Leite",
-		"Ovo",
-		"Macarrão",
-		"File de Boi",
-		"Costelinha de Porco",
-		"Alface",
-		"Mostarda",
-		"Feijão",
-		"Linguiça",
-		"Batata",
-		"Cenoura",
-		"Alho",
-		"Vinho Branco",
-		"Peito de Frango",
-		"Limão",
-		"Azeite",
-		"Queijo",
-		"Cebola",
-		"Tomate",
-		"Salsinha",
-		"Coentro",
-		"Sobrecoxa de Frango",
-		"Couve",
-		"Abobora",
-		"Abobrinha",
-	}
-
-	for _, item := range ingredients {
-		externalID := uuid.New()
-
-		// Execute a consulta de inserção
-		_, err := db.Exec("INSERT INTO ingredients (external_id, name) VALUES ($1, $2)", externalID, item)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
 }
 
 func addExternalIDConstraints(db *sql.DB) {
