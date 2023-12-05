@@ -12,10 +12,9 @@ var (
 )
 
 type Recommendation struct {
-	Recipe  Recipe
-	Grocery []Grocery
-	Reason  Reason
-	Type    RecommendationType
+	Recipe Recipe             `json:"recipe"`
+	Reason Reason             `json:"reason"`
+	Type   RecommendationType `json:"type"`
 }
 
 var (
@@ -27,4 +26,29 @@ var (
 // verifica ingredients não disponíveis nos mantimentos
 func IngredientsNotAvailable(recipes []Recipe, groceries []Grocery) []string {
 	return nil
+}
+
+func AvailableRecipes(recipes []Recipe, groceries []Grocery) []string {
+	available := []string{}
+
+	for _, recipe := range recipes {
+		requiredIngredients := map[string]float64{}
+		for ingredient, quantity := range recipe.Ingredients {
+			requiredIngredients[ingredient] = quantity.Value
+		}
+
+		for _, grocery := range groceries {
+			if _, ok := requiredIngredients[grocery.Ingredient]; ok {
+				if grocery.Quantity.Value < requiredIngredients[grocery.Ingredient] {
+					continue
+				}
+				grocery.Quantity.Value -= requiredIngredients[grocery.Ingredient]
+				if grocery.Quantity.Value > 0 {
+					available = append(available, recipe.Name)
+				}
+			}
+		}
+	}
+
+	return available
 }

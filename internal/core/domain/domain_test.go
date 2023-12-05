@@ -391,53 +391,88 @@ func TestRecipeIngredientsAvailable(t *testing.T) {
 
 }
 
-// func TestRecipesAvailable(t *testing.T) {
-// 	recipes := []domain.Recipe{
-// 		{
-// 			ID:   "recipe-1",
-// 			Name: "Pavlova",
-// 			Ingredients: map[string]domain.Quantity{
-// 				"ovo": {
-// 					Value: 15,
-// 					Type:  "unit",
-// 				},
-// 			},
-// 		},
-// 		{
-// 			ID:   "recipe-2",
-// 			Name: "Pavlova",
-// 			Ingredients: map[string]domain.Quantity{
-// 				"ovo": {
-// 					Value: 2,
-// 					Type:  "unit",
-// 				},
-// 				"mararrao": {
-// 					Value: 200,
-// 					Type:  "grams",
-// 				},
-// 			},
-// 		},
-// 		{
-// 			ID:   "recipe-3",
-// 			Name: "Bruschetta",
-// 			Ingredients: map[string]domain.Quantity{
-// 				"pao": {
-// 					Value: 1,
-// 					Type:  "unit",
-// 				},
-// 				"tomate": {
-// 					Value: 3,
-// 					Type:  "unit",
-// 				},
-// 				"cebola": {
-// 					Value: 1,
-// 					Type:  "unit",
-// 				},
-// 				"alho": {
-// 					Value: 1,
-// 					Type:  "unit",
-// 				},
-// 			},
-// 		},
-// 	}
-// }
+func TestAvailableRecipes(t *testing.T) {
+	recipes := []domain.Recipe{
+		{
+			ID:          "1",
+			Name:        "Bolo de chocolate",
+			Ingredients: map[string]domain.Quantity{"farinha": {Value: 100, Type: "g"}, "chocolate": {Value: 50, Type: "g"}},
+			Yield:       10,
+			CookTime:    time.Hour,
+		},
+		{
+			ID:          "2",
+			Name:        "Arroz branco",
+			Ingredients: map[string]domain.Quantity{"arroz": {Value: 100, Type: "g"}},
+			Yield:       5,
+			CookTime:    time.Minute,
+		},
+	}
+
+	groceries := []domain.Grocery{
+		{
+			ID:           "2",
+			Name:         "Rice",
+			Type:         "Food",
+			PurchaseDate: "2023-08-01",
+			Ingredient:   "arroz",
+			DueDate:      "2023-08-30",
+			IsPerishable: false,
+			Quantity:     domain.Quantity{Value: 1000, Type: "g"},
+		},
+	}
+
+	expected := []string{"Arroz branco"}
+
+	actual := domain.AvailableRecipes(recipes, groceries)
+
+	assert.EqualValues(t, expected, actual)
+}
+
+func TestMissingRecipeIngredientsAllIngredientsAvailable(t *testing.T) {
+	recipes := []domain.Recipe{
+		{
+			ID:          "1",
+			Name:        "Bolo de chocolate",
+			Ingredients: map[string]domain.Quantity{"farinha": {Value: 100, Type: "g"}, "chocolate": {Value: 50, Type: "g"}},
+			Yield:       10,
+			CookTime:    time.Hour,
+		},
+		{
+			ID:          "2",
+			Name:        "Arroz branco",
+			Ingredients: map[string]domain.Quantity{"arroz": {Value: 100, Type: "g"}},
+			Yield:       5,
+			CookTime:    time.Minute,
+		},
+	}
+
+	groceries := []domain.Grocery{
+		{
+			ID:           "1",
+			Name:         "Flour",
+			Type:         "Food",
+			PurchaseDate: "2023-08-01",
+			Ingredient:   "farinha",
+			DueDate:      "2023-08-15",
+			IsPerishable: false,
+			Quantity:     domain.Quantity{Value: 500, Type: "g"},
+		},
+		{
+			ID:           "2",
+			Name:         "Rice",
+			Type:         "Food",
+			PurchaseDate: "2023-08-01",
+			Ingredient:   "arroz",
+			DueDate:      "2023-08-30",
+			IsPerishable: false,
+			Quantity:     domain.Quantity{Value: 1000, Type: "g"},
+		},
+	}
+
+	expected := []string{"chocolate"}
+
+	actual := domain.MissingRecipeIngredients(recipes[0], groceries)
+
+	assert.EqualValues(t, expected, actual)
+}

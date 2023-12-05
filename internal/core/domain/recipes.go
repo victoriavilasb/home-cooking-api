@@ -3,11 +3,11 @@ package domain
 import "time"
 
 type Recipe struct {
-	ID          string
-	Name        string
-	Ingredients map[string]Quantity
-	Yield       int32
-	CookTime    time.Duration
+	ID          string              `json:"id"`
+	Name        string              `json:"name"`
+	Ingredients map[string]Quantity `json:"ingredients"`
+	Yield       int32               `json:"yield"`
+	CookTime    time.Duration       `json:"cook_time"`
 }
 
 func IsRecipeIngredientsAvailable(recipe Recipe, groceries []Grocery) bool {
@@ -46,8 +46,25 @@ func IsRecipeIngredientsAvailable(recipe Recipe, groceries []Grocery) bool {
 }
 
 // // retorna um array com todos os ingredientes faltantes
-func MissingRecipeIngredients(recipe Recipe, groceries []Grocery) map[string]Quantity {
-	return nil
+func MissingRecipeIngredients(recipe Recipe, groceries []Grocery) []string {
+	missing := []string{}
+
+	for ingredient, quantity := range recipe.Ingredients {
+		found := false
+		for _, grocery := range groceries {
+			if grocery.Ingredient == ingredient {
+				if grocery.Quantity.Value >= quantity.Value {
+					found = true
+					break
+				}
+			}
+		}
+		if !found {
+			missing = append(missing, ingredient)
+		}
+	}
+
+	return missing
 }
 
 // retorna as receitas cujos ingredientes estão disponíveis

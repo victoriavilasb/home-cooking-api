@@ -16,8 +16,8 @@ type RepositoryClient struct {
 	Logger *zap.SugaredLogger
 }
 
-func NewRepositoryClient(db *sql.DB, logger *zap.SugaredLogger) RepositoryClient {
-	return RepositoryClient{
+func NewRepositoryClient(db *sql.DB, logger *zap.SugaredLogger) *RepositoryClient {
+	return &RepositoryClient{
 		DB:     db,
 		Logger: logger,
 	}

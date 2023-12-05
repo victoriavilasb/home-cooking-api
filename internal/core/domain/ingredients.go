@@ -1,8 +1,8 @@
 package domain
 
 type Ingredient struct {
-	ID   string
-	Name string
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func MostPopularIngredientsInRecipes(recipes []Recipe) map[string]int {
@@ -18,6 +18,5 @@ func MostPopularIngredientsInRecipes(recipes []Recipe) map[string]int {
 		}
 	}
 
-	// ingredients e a quantidade de vezes que eles aparecem
 	return ingredientsRecipeCount
 }
