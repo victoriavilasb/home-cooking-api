@@ -13,6 +13,7 @@ type RepositoryProvider interface {
 	ListGroceries(ctx context.Context, filter GroceryFilter) ([]domain.Grocery, error)
 	ListRecipes(ctx context.Context, filter RecipeFilter) ([]domain.Recipe, error)
 	InsertIngredients(ctx context.Context, ingredient domain.Ingredient) error
+	UpsertRecipeIngredient(ctx context.Context, recipeID string, ingredientID string, quantityValue float64, quantityUnit string) error
 }
 
 type HomeCookingServiceProvider interface {

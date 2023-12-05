@@ -1,13 +1,11 @@
 package domain
 
-import "time"
-
 type Recipe struct {
 	ID          string              `json:"id"`
 	Name        string              `json:"name"`
 	Ingredients map[string]Quantity `json:"ingredients"`
 	Yield       int32               `json:"yield"`
-	CookTime    time.Duration       `json:"cook_time"`
+	CookTime    string              `json:"cook_time"`
 }
 
 func IsRecipeIngredientsAvailable(recipe Recipe, groceries []Grocery) bool {

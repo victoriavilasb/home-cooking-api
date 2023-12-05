@@ -36,6 +36,18 @@ func (r *RepositoryClient) UpsertGrocery(ctx context.Context, grocery domain.Gro
 	return err
 }
 
+func (r *RepositoryClient) UpsertRecipeIngredient(ctx context.Context, recipeID string, ingredientID string, quantityValue float64, quantityUnit string) error {
+	query := `
+		INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity_value, quantity_unit)
+		VALUES ($1, $2, $3, $4)
+		ON CONFLICT (recipe_id, ingredient_id) DO UPDATE
+		SET quantity_value = $3, quantity_unit = $4
+	`
+
+	_, err := r.DB.Exec(query, recipeID, ingredientID, quantityValue, quantityUnit)
+	return err
+}
+
 func (r *RepositoryClient) DeleteGrocery(ctx context.Context, externalID string) error {
 	query := `
 		UPDATE groceries
@@ -54,7 +66,6 @@ func (r *RepositoryClient) InsertRecipe(ctx context.Context, recipe domain.Recip
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
 
 	// Inserir a receita
 	query := `
@@ -63,7 +74,7 @@ func (r *RepositoryClient) InsertRecipe(ctx context.Context, recipe domain.Recip
 		RETURNING id
 	`
 	var recipeID string
-	err = tx.QueryRowContext(ctx, query, recipe.ID, recipe.Name, recipe.Yield, recipe.CookTime.String()).Scan(&recipeID)
+	err = tx.QueryRowContext(ctx, query, recipe.ID, recipe.Name, recipe.Yield, recipe.CookTime).Scan(&recipeID)
 	if err != nil {
 		return err
 	}
@@ -149,6 +160,7 @@ func (r *RepositoryClient) ListGroceries(ctx context.Context, filter ports.Groce
 			PurchaseDate: grocery.PurchaseDate.Format(time.DateOnly), // Formatar para string
 			DueDate:      grocery.DueDate.Format(time.DateOnly),      // Formatar para string
 			IsPerishable: grocery.IsPerishable,
+			Ingredient:   grocery.Ingredient,
 			Quantity: domain.Quantity{
 				Value: grocery.QuantityValue,
 				Type:  grocery.QuantityUnit,
@@ -205,11 +217,44 @@ func (r *RepositoryClient) ListRecipes(ctx context.Context, filter ports.RecipeF
 			return nil, err
 		}
 
+		recipe_ingredients_query := `
+			SELECT ingredient_id, quantity_value, quantity_unit FROM recipe_ingredients
+			WHERE recipe_id = $1
+		`
+
+		recipe_ingredients, err := r.DB.Query(recipe_ingredients_query, recipe.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		ingredients := map[string]domain.Quantity{}
+
+		for recipe_ingredients.Next() {
+			var (
+				ingredient     string
+				quantity_unit  string
+				quantity_value float64
+			)
+			if err := recipe_ingredients.Scan(
+				&ingredient,
+				&quantity_value,
+				&quantity_unit,
+			); err != nil {
+				return nil, err
+			}
+
+			ingredients[ingredient] = domain.Quantity{
+				Value: quantity_value,
+				Type:  quantity_unit,
+			}
+		}
+
 		recipes = append(recipes, domain.Recipe{
-			ID:       recipe.ExternalID,
-			Name:     recipe.Name,
-			Yield:    recipe.Yield,
-			CookTime: recipe.CookTime,
+			ID:          recipe.ExternalID,
+			Name:        recipe.Name,
+			Yield:       recipe.Yield,
+			CookTime:    recipe.CookTime,
+			Ingredients: ingredients,
 		})
 	}
 

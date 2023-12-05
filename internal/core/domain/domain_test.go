@@ -398,14 +398,14 @@ func TestAvailableRecipes(t *testing.T) {
 			Name:        "Bolo de chocolate",
 			Ingredients: map[string]domain.Quantity{"farinha": {Value: 100, Type: "g"}, "chocolate": {Value: 50, Type: "g"}},
 			Yield:       10,
-			CookTime:    time.Hour,
+			CookTime:    time.Hour.String(),
 		},
 		{
 			ID:          "2",
 			Name:        "Arroz branco",
 			Ingredients: map[string]domain.Quantity{"arroz": {Value: 100, Type: "g"}},
 			Yield:       5,
-			CookTime:    time.Minute,
+			CookTime:    time.Minute.String(),
 		},
 	}
 
@@ -436,14 +436,14 @@ func TestMissingRecipeIngredientsAllIngredientsAvailable(t *testing.T) {
 			Name:        "Bolo de chocolate",
 			Ingredients: map[string]domain.Quantity{"farinha": {Value: 100, Type: "g"}, "chocolate": {Value: 50, Type: "g"}},
 			Yield:       10,
-			CookTime:    time.Hour,
+			CookTime:    time.Hour.String(),
 		},
 		{
 			ID:          "2",
 			Name:        "Arroz branco",
 			Ingredients: map[string]domain.Quantity{"arroz": {Value: 100, Type: "g"}},
 			Yield:       5,
-			CookTime:    time.Minute,
+			CookTime:    time.Minute.String(),
 		},
 	}
 

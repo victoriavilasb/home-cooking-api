@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/emicklei/go-restful"
-	"github.com/victoriavilasb/home-cooking-api/internal/core/ports"
 )
 
 const (
@@ -13,12 +12,7 @@ const (
 )
 
 func (h *Handler) RetrieveRecommendations(request *restful.Request, response *restful.Response) {
-	var filter *ports.RecommendationFilter
-	if err := request.ReadEntity(&filter); err != nil {
-		response.WriteError(http.StatusInternalServerError, err)
-	}
-
-	recommendations, err := h.service.RetrieveRecommendations(request.Request.Context(), filter)
+	recommendations, err := h.service.RetrieveRecommendations(request.Request.Context(), nil)
 	if err != nil {
 		response.WriteError(http.StatusInternalServerError, err)
 	}
@@ -27,5 +21,5 @@ func (h *Handler) RetrieveRecommendations(request *restful.Request, response *re
 		response.WriteError(http.StatusNotFound, errors.New("no recommendations found matching this filter"))
 	}
 
-	response.WriteHeaderAndEntity(http.StatusFound, recommendations)
+	response.WriteHeaderAndEntity(http.StatusOK, recommendations)
 }

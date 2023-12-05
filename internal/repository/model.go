@@ -5,13 +5,13 @@ import (
 )
 
 type Recipe struct {
-	ID         int           `json:"id" db:"id"`
-	ExternalID string        `json:"external_id" db:"external_id"`
-	Name       string        `json:"name" db:"name"`
-	Yield      int32         `json:"yield" db:"yield"`
-	CookTime   time.Duration `json:"cook_time" db:"cook_time"`
-	CreatedAt  time.Time     `json:"created_at" db:"created_at"`
-	UpdatedAt  time.Time     `json:"updated_at" db:"updated_at"`
+	ID         int       `json:"id" db:"id"`
+	ExternalID string    `json:"external_id" db:"external_id"`
+	Name       string    `json:"name" db:"name"`
+	Yield      int32     `json:"yield" db:"yield"`
+	CookTime   string    `json:"cook_time" db:"cook_time"`
+	CreatedAt  time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at" db:"updated_at"`
 }
 
 type Ingredient struct {
@@ -33,7 +33,7 @@ type Grocery struct {
 	QuantityUnit  string    `json:"quantity_unit" db:"quantity_unit"`
 	CreatedAt     time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at" db:"updated_at"`
-	Available     bool      `json:"available" db:"available"`
+	Available     *bool     `json:"available" db:"available"`
 }
 
 type RecipeIngredient struct {
